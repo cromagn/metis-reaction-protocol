@@ -1,7 +1,4 @@
 # .readthedocs.yaml
-# Read the Docs configuration file
-# See: https://docs.readthedocs.io/en/stable/config-file/v2.html
-
 version: 2
 
 build:
@@ -9,35 +6,9 @@ build:
   tools:
     python: "3.11"
 
-  jobs:
-    pre_build:
-      # Se ti serve generare file dai sorgenti prima del build, aggiungi qui
-      # - python scripts/generate_docs_stubs.py
-      - echo "Starting RTD build..."
-
 sphinx:
   configuration: docs/conf.py
 
 python:
   install:
-    - method: pip
-      path: .
     - requirements: docs/requirements.txt
-
-# Se hai la documentazione solo in inglese:
-# formats:
-#   - htmlzip
-#   - pdf
-#   - epub
-
-# Opzionale: configura i rami da cui Read the Docs deve costruire la documentazione
-# Se non serve, puoi togliere questo blocco.
-#submodules:
-#  include: all
-#  recursive: true
-
-# Se vuoi specificare quali versioni/branch buildare:
-#build:
-#  os: ubuntu-22.04
-#  tools:
-#    python: "3.11"
