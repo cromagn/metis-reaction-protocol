@@ -1,4 +1,4 @@
-.. _hardware-details:
+.. _hardware:
 
 Hardware Architecture and Physical Details
 ==========================================
