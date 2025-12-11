@@ -51,5 +51,4 @@ This is an open-source analytical effort. Contributions, corrections, and new fi
 
 Please refer to the :doc:`tools` section for information on how the data was captured and analyzed.
 
-* `GitHub Repository <URL_DEL_TUO_REPO_QUI>`_
-* `Report an Issue <URL_PER_SEGNALARE_UN_PROBLEMA>`_
+* `GitHub Repository https://github.com/cromagn/metis-reaction-protocol`_
