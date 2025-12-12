@@ -12,7 +12,7 @@
 
    The author(s) of this documentation and the associated code are **not affiliated with, endorsed by, or sponsored by METIS** or its parent companies. Use of this information may violate the terms of service or warranty agreements of the original manufacturer. Proceed at your own risk.
 
-METIS Reaction Lights: BLE Protocol Analysis
+METIS Reaction Lights: BLE Protocol Analysis (WIP)
 ============================================
 
 Welcome to the documentation for the reverse-engineered METIS Reaction Lights BLE Protocol.
