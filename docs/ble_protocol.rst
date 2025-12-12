@@ -3,7 +3,7 @@
 Bluetooth Low Energy (BLE) Protocol Analysis
 =============================================
 
-This chapter details the findings related to the Bluetooth Low Energy communication stack, moving from the low-level identification (GAP) to the high-level data structure (GATT) that governs command and event exchange.
+This chapter details the findings related to the Bluetooth Low Energy communication stack, moving from the low-level identification (GAP) to the high-level data structure (GATT) that governs command and event exchange. 
 
 1. Generic Access Profile (GAP) Analysis
 ----------------------------------------
@@ -33,7 +33,7 @@ The MAC addresses observed in the SCAN_RSP packets appear to be **Public Address
 2. Generic Attribute Profile (GATT) Discovery
 ---------------------------------------------
 
-The Attribute Discovery phase was critical in identifying the proprietary communication channels. The analysis reveals a single custom service responsible for all command and event exchange. 
+The Attribute Discovery phase was critical in identifying the proprietary communication channels. The analysis reveals a single custom service responsible for all command and event exchange.
 
 2.1. Identified Custom Service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,8 +41,6 @@ The Attribute Discovery phase was critical in identifying the proprietary commun
 The primary communication channel is defined by the following proprietary 128-bit UUID, acting as a command/data relay service:
 
 * **Custom Service UUID:** ``6e400001-b5a3-f393-e0a9-e50e24dcca9e``
-
-This service contains the two essential Characteristics required for bidirectional communication.
 
 2.2. Characteristic Identification Methodology
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -88,3 +86,11 @@ The proprietary protocol likely uses a structured byte array for commands sent t
 * **Checksum/CRC (Optional):** Used for data integrity verification.
 
 We will proceed to the **:doc:`att_analysis`** chapter to analyze captured data and map these initial commands.
+
+---
+Contextual Resources
+--------------------
+
+For context regarding the device functionality and use case, the following resource is useful:
+
+* `METIS Reaction Lights | Reaction Training - YouTube <https://www.youtube.com/watch?v=i3YOfDJhfew>`_
