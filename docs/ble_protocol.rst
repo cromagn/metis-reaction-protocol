@@ -28,7 +28,7 @@ The MAC addresses observed in the SCAN_RSP packets appear to be **Public Address
 * **MAC Addresses Observed:**
     * **Device $react-1- (Example):** ``7e:ad:07:91:53:e6``
     * **Device $react-2- (Example):** ``69:de:d6:c7:4c:71``
-    * **Note:** An older/alternative MAC address ``cc:03:01:ea:28:91`` was also identified for ``$react-1-``, suggesting either a randomized address change between sessions or different hardware revisions.
+    * **Note:** Also MAC address ``cc:03:01:ea:28:91``  and ``cc:03:01:ea:28:91``was also identified for ``$react-1-`` and ``$react-2-`` as initial address (tbd)
 
 2. Generic Attribute Profile (GATT) Discovery
 ---------------------------------------------
