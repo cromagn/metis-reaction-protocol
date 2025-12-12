@@ -6,7 +6,7 @@ from datetime import datetime
 sys.path.insert(0, os.path.abspath(".."))
 
 project = "Metis BLE Protocol Reverse Engineering"
-author = "Carlo"
+author = "cromagn"
 copyright = f"{datetime.now().year}, {author}"
 
 extensions = [
