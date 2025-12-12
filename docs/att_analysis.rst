@@ -15,12 +15,17 @@ The Command Channel receives data from the Host (Central) to the Light (Peripher
 
 We hypothesize the command packet follows a sequence of functional fields:
 
-| Field (Bytes) | Role/Function | Hypothesis | Example (Placeholder) |
-| :--- | :--- | :--- | :--- |
-| **Byte 0** | **Start Byte/Command ID** | Always the same value for a specific action (e.g., ``0x01`` for 'Set Color'). | ``0x01`` |
-| **Byte 1** | **Device Target** | Identifies which light (``$react-1-``, ``$react-2-``, or ALL) is the recipient. | ``0xFF`` (All Lights) |
-| **Byte 2-N** | **Payload/Arguments** | Contains the data specific to the command (e.g., RGB values, program timing). | ``0xFF 0x00 0x00`` (Red) |
-| **Byte N+1** | **Checksum/CRC (Optional)** | Simple XOR or CRC check for packet integrity. | TBD |
++-------------+-------------------------------------------------------------+---------------------------+---------------------------+
+| Field (Bytes) | Role/Function                                               | Hypothesis                | Example (Placeholder)     |
++=============+=============================================================+===========================+===========================+
+| **Byte 0** | **Start Byte/Command ID** | Always the same value for a specific action (e.g., ``0x01`` for 'Set Color'). | ``0x01``                  |
++-------------+-------------------------------------------------------------+---------------------------+---------------------------+
+| **Byte 1** | **Device Target** | Identifies which light (``$react-1-``, ``$react-2-``, or ALL) is the recipient. | ``0xFF`` (All Lights)     |
++-------------+-------------------------------------------------------------+---------------------------+---------------------------+
+| **Byte 2-N** | **Payload/Arguments** | Contains the data specific to the command (e.g., RGB values, program timing). | ``0xFF 0x00 0x00`` (Red)  |
++-------------+-------------------------------------------------------------+---------------------------+---------------------------+
+| **Byte N+1** | **Checksum/CRC (Optional)** | Simple XOR or CRC check for packet integrity. | TBD                       |
++-------------+-------------------------------------------------------------+---------------------------+---------------------------+
 
 1.2. Decoded Commands (Work in Progress)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -29,11 +34,15 @@ This table will be populated with observed hex payloads and their decoded meanin
 
 *To decode, we need the raw hex payload captured when a known action is executed (e.g., tapping 'Red' on the app).*
 
-| Action (App Event) | Observed Hex Payload (UUID 0002) | Length | Decoded Meaning |
-| :--- | :--- | :--- | :--- |
-| **Set Color: RED** | **PLACEHOLDER DATA** | TBD | Command ID X, Target ALL, Color R:255, G:0, B:0 |
-| **Set Color: BLUE** | **PLACEHOLDER DATA** | TBD | Command ID X, Target ALL, Color R:0, G:0, B:255 |
-| **Request Status** | **PLACEHOLDER DATA** | TBD | Command ID Y, Requests Battery/Sensor Status |
++------------------------+--------------------------+----------+-------------------------------------------------------------------+
+| Action (App Event)     | Observed Hex Payload (UUID 0002) | Length   | Decoded Meaning                                                   |
++========================+==========================+==========+===================================================================+
+| **Set Color: RED** | **PLACEHOLDER DATA** | TBD      | Command ID X, Target ALL, Color R:255, G:0, B:0                   |
++------------------------+--------------------------+----------+-------------------------------------------------------------------+
+| **Set Color: BLUE** | **PLACEHOLDER DATA** | TBD      | Command ID X, Target ALL, Color R:0, G:0, B:255                   |
++------------------------+--------------------------+----------+-------------------------------------------------------------------+
+| **Request Status** | **PLACEHOLDER DATA** | TBD      | Command ID Y, Requests Battery/Sensor Status                      |
++------------------------+--------------------------+----------+-------------------------------------------------------------------+
 
 2. ATT Notification Channel Structure (UUID 6e40...0003)
 --------------------------------------------------------
@@ -43,21 +52,23 @@ The Notification Channel is used by the METIS light (Peripheral) to send asynchr
 2.1. Proposed Event Packet Format
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-| Field (Bytes) | Role/Function | Hypothesis |
-| :--- | :--- | :--- |
++-------------+-------------------------------------------------------------+---------------------------------------------------------+
+| Field (Bytes) | Role/Function                                               | Hypothesis                                              |
++=============+=============================================================+=========================================================+
 | **Byte 0** | **Event ID** | Identifies the type of event (e.g., ``0x10`` for 'Touch Detected'). |
++-------------+-------------------------------------------------------------+---------------------------------------------------------+
 | **Byte 1** | **Source Device ID** | Identifies which light in the network generated the event (e.g., ``0x01`` for $react-1-$). |
++-------------+-------------------------------------------------------------+---------------------------------------------------------+
 | **Byte 2-N** | **Event Data** | Additional data (e.g., sensor pressure value, new battery level). |
++-------------+-------------------------------------------------------------+---------------------------------------------------------+
 
 2.2. Decoded Events (Work in Progress)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-| Event (Observed) | Observed Hex Payload (UUID 0003) | Length | Decoded Meaning |
-| :--- | :--- | :--- | :--- |
-| **Sensor Touch** | **PLACEHOLDER DATA** | TBD | Event ID X, Source Y, Touch confirmed. |
-| **Battery Level** | **PLACEHOLDER DATA** | TBD | Event ID Z, Current battery percentage: N%. |
-
----
-**Next Step**
-
-To proceed with the decoding, please provide the raw hexadecimal payloads (byte arrays) captured from Wireshark for simple, repeatable actions (e.g., "turn red," "turn blue," or "touch the sensor").
++------------------------+--------------------------+----------+---------------------------------------------------+
+| Event (Observed)       | Observed Hex Payload (UUID 0003) | Length   | Decoded Meaning                                   |
++========================+==========================+==========+===================================================+
+| **Sensor Touch** | **PLACEHOLDER DATA** | TBD      | Event ID X, Source Y, Touch confirmed.            |
++------------------------+--------------------------+----------+---------------------------------------------------+
+| **Battery Level** | **PLACEHOLDER DATA** | TBD      | Event ID Z, Current battery percentage: N%.       |
++------------------------+--------------------------+----------+---------------------------------------------------+
