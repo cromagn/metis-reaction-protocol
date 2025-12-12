@@ -23,10 +23,12 @@ The devices broadcast their presence using standard **SCAN_RSP** (Scan Response)
 1.2. MAC Addresses and Public Addressing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The MAC addresses observed in the SCAN_RSP packets appear to be **Public Addresses** (non-randomized), which simplifies connection attempts, as the address remains static.
+I pacchetti SCAN_RSP forniscono i MAC Address che appaiono essere **Public Addresses** (non randomizzati), il che suggerisce che l'indirizzo rimane statico per ogni dispositivo.
 
-* **Example Address Observed (Device 1):** ``cc:03:01:ea:28:91``
-* **Manufacturer:** The initial bytes of the MAC address (OUI) should be noted for verification of the hardware vendor.
+* **MAC Address Osservati:**
+    * **Device $react-1-:** ``7e:ad:07:91:53:e6``
+    * **Device $react-2-:** ``69:de:d6:c7:4c:71``
+* **Manufacturer:** I byte iniziali degli indirizzi MAC (Organizationally Unique Identifier - OUI) dovrebbero essere controllati per identificare potenzialmente il produttore del chip Bluetooth (es. Nordic, Texas Instruments, ecc.). Questo dato può fornire indizi sul tipo di stack BLE utilizzato.
 
 1.3. The 'Flip' Principle in GAP Context
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,4 +37,14 @@ As discussed in the :ref:`hardware-details` section, the METIS system uses a dyn
 
 * All devices advertise initially, but the host application selects one device (e.g., ``$react-1-``) to initiate the **Central Role connection**.
 * This first connected device (the **Controller**) then becomes responsible for establishing the proprietary mesh/network with the other **Node** devices.
-* **Implication for Sniffing:** Only the **Controller** device maintains a direct, high-level GATT connection to the host application (phone/PC). The other devices communicate with the Controller using lower-level, non-GATT protocols or secondary advertising channels.
+* **Implication for Sniffing:** Only the **Controller** device maintains a direct, high-level GATT connection to the host application (phone/PC). The other devices communicate with the Controller using lower-level, non-GATT protocols or secondary advertising channels. 
+
+---
+
+**Prossimo Passaggio Critico (GATT):**
+
+Ora che l'identificazione (GAP) è chiara, il passo successivo è l'**Attribute Discovery (GATT)**.
+
+Se ti connetti a uno dei dispositivi (`7e:ad:07:91:53:e6`), quali **Service UUID** e **Characteristic UUID** espone? Questo è ciò che ti dirà dove inviare e ricevere i comandi.
+
+Hai già catturato questi dati?
