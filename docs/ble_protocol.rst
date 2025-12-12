@@ -8,43 +8,53 @@ This chapter details the findings related to the Bluetooth Low Energy communicat
 1. Generic Access Profile (GAP) Analysis
 ----------------------------------------
 
-The GAP defines how BLE devices make themselves available to be connected. Our analysis confirms the following identification patterns:
+The Generic Access Profile (GAP) defines how the METIS Reaction Lights make themselves available for connection. Our analysis, performed using a BLE sniffer and Wireshark, confirms the following identification patterns during the advertising phase.
 
 1.1. Device Naming and Identification
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The devices broadcast their presence using standard **SCAN_RSP** (Scan Response) packets.
 
-* **Identifiable Name:** All devices use a common prefix followed by a unique identifier.
-    * **Pattern:** ``$react-X-`` (where X is a number, usually 1, 2, 3, etc.).
-    * **Example Observed:** ``$react-1-`` and ``$react-2-``
-    * **Purpose:** This naming convention simplifies the initial identification and selection process within the official mobile application.
+* **Identifiable Name:** All devices use a common prefix followed by a unique, numeric identifier, observed in the local name field (0x09) of the advertising payload.
+    * **Pattern:** ``$react-X-`` (where X is the sequential device number).
+    * **Examples Observed:** ``$react-1-`` and ``$react-2-``
+    * **Purpose:** This consistent naming convention simplifies the initial identification and selection process within the official mobile application.
 
 1.2. MAC Addresses and Public Addressing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-I pacchetti SCAN_RSP forniscono i MAC Address che appaiono essere **Public Addresses** (non randomizzati), il che suggerisce che l'indirizzo rimane statico per ogni dispositivo.
+The MAC addresses observed in the SCAN_RSP packets appear to be **Public Addresses** (non-randomized), which suggests that the address remains static for each device and simplifies persistent connection attempts. 
 
-* **MAC Address Osservati:**
-    * **Device $react-1-:** ``7e:ad:07:91:53:e6``
-    * **Device $react-2-:** ``69:de:d6:c7:4c:71``
-* **Manufacturer:** I byte iniziali degli indirizzi MAC (Organizationally Unique Identifier - OUI) dovrebbero essere controllati per identificare potenzialmente il produttore del chip Bluetooth (es. Nordic, Texas Instruments, ecc.). Questo dato può fornire indizi sul tipo di stack BLE utilizzato.
+* **MAC Addresses Observed:**
+    * **Device $react-1- (Example):** ``7e:ad:07:91:53:e6``
+    * **Device $react-2- (Example):** ``69:de:d6:c7:4c:71``
+* **Manufacturer Identification:** The initial bytes of the MAC addresses (the Organizationally Unique Identifier - OUI) should be cross-referenced with the Bluetooth SIG database. This data can provide hints regarding the underlying BLE chip vendor (e.g., Nordic Semiconductor, Texas Instruments, etc.), which may suggest the type of BLE stack in use.
 
 1.3. The 'Flip' Principle in GAP Context
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As discussed in the :ref:`hardware-details` section, the METIS system uses a dynamic network. In the context of GAP, this means:
+As discussed in the :ref:`hardware-details` section, the METIS system uses a dynamic network architecture. In the context of GAP, this implies:
 
-* All devices advertise initially, but the host application selects one device (e.g., ``$react-1-``) to initiate the **Central Role connection**.
-* This first connected device (the **Controller**) then becomes responsible for establishing the proprietary mesh/network with the other **Node** devices.
-* **Implication for Sniffing:** Only the **Controller** device maintains a direct, high-level GATT connection to the host application (phone/PC). The other devices communicate with the Controller using lower-level, non-GATT protocols or secondary advertising channels. 
+* **Initial State:** All devices advertise initially.
+* **Controller Selection:** The host application (phone/PC) selects one device (e.g., the device with MAC ``7e:ad:07:91:53:e6``) to initiate the **Central Role connection**. This first device becomes the **Controller** (Master).
+* **Node Communication:** The remaining devices (the **Nodes**) do not maintain a direct GATT connection to the host. They communicate with the Controller using proprietary, lower-level, or mesh-like BLE protocols.
+* **Implication for Sniffing:** To capture all proprietary commands, the sniffer must be configured to follow the GATT connection between the Host $\leftrightarrow$ **Controller**.
+
+2. Generic Attribute Profile (GATT) Discovery
+---------------------------------------------
+
+The GATT defines the data structure and how attributes (Services, Characteristics) are exchanged. This is the layer where application commands are sent and received.
+
+**(This section will be populated once Service and Characteristic UUIDs are identified)**
+
+2.1. Standard Services (Known)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Standard services (e.g., Device Information Service 0x180A) are typically exposed.
+
+2.2. Custom Command Service (Target)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The primary goal of the GATT discovery is to identify the custom **128-bit Service UUID** responsible for receiving commands and sending event notifications.
 
 ---
-
-**Prossimo Passaggio Critico (GATT):**
-
-Ora che l'identificazione (GAP) è chiara, il passo successivo è l'**Attribute Discovery (GATT)**.
-
-Se ti connetti a uno dei dispositivi (`7e:ad:07:91:53:e6`), quali **Service UUID** e **Characteristic UUID** espone? Questo è ciò che ti dirà dove inviare e ricevere i comandi.
-
-Hai già catturato questi dati?
