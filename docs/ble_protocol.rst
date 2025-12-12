@@ -49,10 +49,15 @@ This service contains the two essential Characteristics required for bidirection
 
 The specific roles of the two characteristics were determined by analyzing their respective **GATT Properties**, which define the direction of the data flow and strongly indicate a **UART Emulation Service** pattern (common in Nordic nRF chipsets).
 
-| Characteristic UUID Suffix | Property | Communication Role |
-| :--- | :--- | :--- |
-| **0002** | ``['write', 'write-without-response']`` | **Command TX:** The presence of the ``WRITE`` property confirms this is the endpoint for commands sent *to* the device. |
-| **0003** | ``['notify']`` | **Event RX:** The ``NOTIFY`` property confirms the device uses this channel to send asynchronous data *to* the host. |
++----------------------------+------------------------------------------+-------------------------------------------------------------------------------------------------------------------+
+| Characteristic UUID Suffix | Property                                 | Communication Role                                                                                                |
++============================+==========================================+===================================================================================================================+
+| **0002** | ``['write', 'write-without-response']``  | **Command TX:** The presence of the ``WRITE`` property confirms this is the endpoint for commands sent *to* the device. |
++----------------------------+------------------------------------------+-------------------------------------------------------------------------------------------------------------------+
+| **0003** | ``['notify']``                           | **Event RX:** The ``NOTIFY`` property confirms the device uses this channel to send asynchronous data *to* the host.   |
++----------------------------+------------------------------------------+-------------------------------------------------------------------------------------------------------------------+
+
+This pattern (Service-0001, Write-0002, Notify-0003) is a strong indicator of a standard **UART Emulation Service** implementation commonly found in Bluetooth chipsets like the Nordic nRF series.
 
 2.3. Command and Event Characteristics
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
