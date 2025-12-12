@@ -28,8 +28,10 @@ Analysis confirms a 2-byte structure for all light and state commands: **[Opcode
 | :--- | :--- | :--- | :--- | :--- |
 | **Keep Alive / Ping** | ``20``             | `0x20` | - | Sent periodically to maintain connection sync.                      |
 | **Turn Off / Reset** | **``04 05``** (followed by **``05``**) | `0x04` / `0x05` | - | Universal command sequence to stop the current illumination/action. |
-| **Set Color: RED (Audio ON)** | ``02 89``          | `0x02` | **`0x89`** | Sets RED light with default audio setting. |
-| **Set Color: RED (Audio OFF)** | ``02 91``          | `0x02` | **`0x91`** | Sets RED light with audio explicitly turned OFF. |
+| **Set Color: RED (Default/Audio)** | ``02 89``          | `0x02` | **`0x89`** | Sets RED light with default mode (Audio likely ON). |
+| **Set Color: RED (Mute)** | ``02 91``          | `0x02` | **`0x91`** | Sets RED light with **Audio explicitly OFF**. |
+| **Set Color: RED (Flash)** | ``02 A1``          | `0x02` | **`0xA1`** | Sets RED light to **Flash Mode**. |
+| **Set Color: RED (Vibration)** | ``02 C1``          | `0x02` | **`0xC1`** | Sets RED light to **Large Vibration Mode**. |
 | **Set Color: GREEN** | ``02 8A``          | `0x02` | **`0x8A`** | Sets the light to GREEN. |
 | **Set Color: YELLOW** | ``02 8B``          | `0x02` | **`0x8B`** | Sets the light to YELLOW. |
 | **Set Color: BLUE** | ``02 8C``          | `0x02` | **`0x8C`** | Sets the light to BLUE. |
@@ -38,13 +40,15 @@ Analysis confirms a 2-byte structure for all light and state commands: **[Opcode
 2.2. State ID (Byte 2) Bit Encoding
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The difference between the two Red commands (`0x89` and `0x91`) strongly suggests that the **State ID** byte is a bitmask controlling both color and features (like audio).
+The analysis of the different RED modes confirms that the **State ID** byte is a bitmask controlling both the base color and operational features (like audio, flash, and vibration).
 
-| State ID Bit | Value | Function |
+| State ID Bit (Weight) | Value $\mathbf{(Hex)}$ | Feature Control |
 | :--- | :--- | :--- |
-| **Bit 4** (Value $\mathbf{8_{16}}$ or $\mathbf{1000_2}$) | $\mathbf{0}$ (e.g., in ``0x89``) | **Audio ON / Default Mode** |
-| **Bit 4** (Value $\mathbf{8_{16}}$ or $\mathbf{1000_2}$) | $\mathbf{1}$ (e.g., in ``0x91``) | **Audio OFF / Mute Mode** |
-| **Bits 0-3, 5-7** | Varies | Encodes the **Color ID** (`0x8` to `0xC` for RGBY) and potentially other features. |
+| **Bit 6** ($\mathbf{64_{10}}$) | $\mathbf{0x40}$ | **Vibration Mode Toggle** ($\mathbf{0 = OFF / 1 = ON}$) |
+| **Bit 5** ($\mathbf{32_{10}}$) | $\mathbf{0x20}$ | **Flash Mode Toggle** ($\mathbf{0 = OFF / 1 = ON}$) |
+| **Bit 4** ($\mathbf{16_{10}}$) | $\mathbf{0x10}$ | **Audio Mute/ON Toggle** ($\mathbf{0 = ON / 1 = MUTE}$) |
+| **Bit 3** ($\mathbf{8_{10}}$) | $\mathbf{0x08}$ | *Default Audio Flag or Secondary Color Feature.* |
+| **Remaining Bits** | Varies | Encode the **Base Color ID** (e.g., the difference between $89_{16}$, $8A_{16}$, $8B_{16}$, $8C_{16}$). |
 
 3. Event/Notification Structure (Handle 0x0005)
 -----------------------------------------------
