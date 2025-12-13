@@ -53,7 +53,7 @@ Once this sequence is completed, the device starts emitting notifications asynch
 
 Here the related sniff
 
-.. image:: _static/HowTo_1.jpg
+.. image:: _static/Init_Sequence.jpg
    :alt: Init sequence
    :align: center
    :width: 50%
