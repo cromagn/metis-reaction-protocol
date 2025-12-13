@@ -14,6 +14,13 @@ How to sniff
 1. Set the correct probe
 
 .. image:: _static/Howto_0.jpg
-   :alt: Diagramma dell'architettura asincrona
+   :alt: BLE Sniff Device
+   :align: center
+   :width: 75%
+   
+1. Choose the correct MAC
+
+.. image:: _static/HowTo_1.jpg
+   :alt: Set the correct MAC
    :align: center
    :width: 75%
