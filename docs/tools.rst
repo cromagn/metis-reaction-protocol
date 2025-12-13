@@ -34,6 +34,5 @@ How to sniff
 
 4. Filter by:
 
-- :kbd: `_ws.col.protocol == "ATT"`
-- :kbd: `frame contains "re"`
--
+:kbd:`_ws.col.protocol == "ATT"`
+:kbd:`frame contains "re"`
