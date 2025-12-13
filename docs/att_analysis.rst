@@ -51,6 +51,13 @@ Every communication session between the application (Central) and the device (Pe
 
 Once this sequence is completed, the device starts emitting notifications asynchronously.
 
+Here the related sniff
+
+.. image:: _static/InitSequence.jpg
+   :alt: Init sequence
+   :align: center
+   :width: 50%
+   
 -----------------------------------------------------------------------
 
 2. Command Structure and Mode Mapping (Handle 0x0003)
@@ -188,3 +195,16 @@ The device emits notifications whenever a state change or physical event (e.g. t
      - ``0x03``
      - Varies
      - Real-time event stream while a light is active (hit detection, feedback, intensity).
+
+
+-----------------------------------------------------------------------
+
+4. Power off sequence
+-----------------------------------------------------
+
+Here the related sniff
+
+.. image:: _static/Power_Off_sequence.jpg
+   :alt: Power off sequence
+   :align: center
+   :width: 50%
