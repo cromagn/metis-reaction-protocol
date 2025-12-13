@@ -32,6 +32,7 @@ How to sniff
    :align: left
    :width: 5%
 
+
 4. Filter by:
 
 :kbd:`_ws.col.protocol == "ATT"` to sniff the ATT command
