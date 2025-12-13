@@ -32,6 +32,8 @@ For context regarding the device functionality and use case, the following resou
 
 * `METIS Reaction Lights | Reaction Training - YouTube <https://www.youtube.com/watch?v=i3YOfDJhfew>`_
 
+Focus of this doc
+-----------------
 This documentation will dissect the communication layers, focusing specifically on how the device handles:
 
 * **Initial Discovery and Paring** (GAP)

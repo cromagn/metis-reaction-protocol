@@ -87,9 +87,3 @@ The proprietary protocol likely uses a structured byte array for commands sent t
 We will proceed to the **:doc:`att_analysis`** chapter to analyze captured data and map these initial commands.
 
 ---
-Contextual Resources
---------------------
-
-For context regarding the device functionality and use case, the following resource is useful:
-
-* `METIS Reaction Lights | Reaction Training - YouTube <https://www.youtube.com/watch?v=i3YOfDJhfew>`_
