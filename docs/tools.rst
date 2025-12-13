@@ -30,7 +30,7 @@ How to sniff
 .. image:: _static/HowTo_2.jpg
    :alt: Play
    :align: left
-   :width: 10%
+   :width: 5%
 
 4. Filter by:
 
