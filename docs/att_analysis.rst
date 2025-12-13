@@ -56,7 +56,7 @@ Here the related sniff
 .. image:: _static/Init_Sequence.jpg
    :alt: Init sequence
    :align: center
-   :width: 50%
+   :width: 90%
    
 -----------------------------------------------------------------------
 
