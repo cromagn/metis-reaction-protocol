@@ -24,6 +24,14 @@ Device Overview
 
 The METIS Reaction Lights are portable, sensor-equipped training devices utilized primarily in sports performance and neuro-training contexts. They communicate wirelessly to coordinate drills involving light activation and touch/proximity detection.
 
+
+Contextual Resources
+--------------------
+
+For context regarding the device functionality and use case, the following resource is useful:
+
+* `METIS Reaction Lights | Reaction Training - YouTube <https://www.youtube.com/watch?v=i3YOfDJhfew>`_
+
 This documentation will dissect the communication layers, focusing specifically on how the device handles:
 
 * **Initial Discovery and Paring** (GAP)
