@@ -204,7 +204,7 @@ The device emits notifications whenever a state change or physical event (e.g. t
 
 Here the related sniff
 
-.. image:: _static/Power_Off_sequence.jpg
+.. image:: _static/Power_off_sequence.jpg
    :alt: Power off sequence
    :align: center
-   :width: 50%
+   :width: 90%
