@@ -23,12 +23,11 @@ The devices broadcast their presence using standard **SCAN_RSP** (Scan Response)
 1.2. MAC Addresses and Public Addressing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The MAC addresses observed in the SCAN_RSP packets appear to be **Public Addresses** (non-randomized), which suggests that the address remains static for each device and simplifies persistent connection attempts.
-
+The MAC addresses observed in the SCAN_RSP packets appear to be **Random** 
 * **MAC Addresses Observed:**
     * **Device $react-1- (Example):** ``7e:ad:07:91:53:e6``
     * **Device $react-2- (Example):** ``69:de:d6:c7:4c:71``
-    * **Note:** Also MAC address ``cc:03:01:ea:28:91``  and ``cc:03:01:ea:28:91`` was also identified for ``$react-1-`` and ``$react-2-`` as initial address (tbd)
+    * **Note:** Also MAC address ``cc:03:01:ea:28:91``  and ``cc:03:01:ea:28:91`` was also identified for ``$react-1-`` and ``$react-2-`` as PUBLIC address
 
 2. Generic Attribute Profile (GATT) Discovery
 ---------------------------------------------

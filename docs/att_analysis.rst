@@ -63,7 +63,7 @@ All control commands sent to the device share a **fixed 2-byte structure**:
    [ Opcode ] [ State ID ]
 
 The most common opcode is ``0x02``, which is used to control light color and operating mode.
-Commands are typically transmitted multiple times to ensure reliable delivery over BLE.
+
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 2.1 Core Command Set
