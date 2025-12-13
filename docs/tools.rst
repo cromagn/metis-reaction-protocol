@@ -12,6 +12,8 @@ Tools
 How to sniff
 ============
 1. Set the correct probe
+
 .. image:: Howto_0.jpg
    :alt: Diagramma dell'architettura asincrona
    :align: center
+   :width: 75%
