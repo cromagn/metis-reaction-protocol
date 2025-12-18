@@ -71,6 +71,111 @@ All control commands sent to the device share a **fixed 2-byte structure**:
 
 The most common opcode is ``0x02``, which is used to control light color and operating mode.
 
+Metis Reaction Protocol: Command Specification
+----------------------------------------------
+
+This document describes the 8-bit command structure used to control the Metis devices. Through reverse engineering of the communication logs, the command byte has been decoded into a specific bitmask.
+
+Command Byte Structure
+----------------------
+
+Each command consists of a single byte (8 bits). The functions are mapped as follows:
+
++-------+-------+-------+-------+-------+-------+-------+-------+
+| Bit 7 | Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
++-------+-------+-------+-------+-------+-------+-------+-------+
+|   Sensor Mode | Flash | Touch | Start |     Color     | Fixed |
++-------+-------+-------+-------+-------+-------+-------+-------+
+
+Detailed Bit Definitions
+------------------------
+
+**Sensor Mode (Bits 7-6)**
+  Determines the sensitivity and the trigger type:
+  * ``00``: Nearby / Close range
+  * ``01``: Far range
+  * ``10``: Small Vibrations
+  * ``11``: Large Vibrations
+
+**Flash (Bit 5)**
+  Controls the visual flash effect:
+  * ``0``: Flash OFF
+  * ``1``: Flash ON
+
+**Touch-Sound Disable (Bit 4)**
+  *Note: This bit uses inverted logic.*
+  * ``0``: Feedback Sound ON
+  * ``1``: Feedback Sound OFF
+
+**Startup-Sound (Bit 3)**
+  * ``0``: Sound at startup OFF
+  * ``1``: Sound at startup ON
+
+**Color Selection (Bits 2-1)**
+  Defines the LED color of the device:
+  * ``00``: Red
+  * ``01``: Yellow
+  * ``10``: Blue
+  * ``11``: Green (Hypothesized)
+
+**Fixed Control (Bit 0)**
+  * Always set to ``1``. This bit likely acts as a command identifier for the receiver.
+
+Reference Table
+---------------
+
+Below are common commands derived from the protocol analysis:
+
+.. list-table:: Verified Commands
+   :widths: 15 15 25 15 15 15
+   :header-rows: 1
+
+   * - Hex
+     - Binary
+     - Sensor Mode
+     - Flash
+     - Color
+     - Startup Sound
+   * - ``01``
+     - ``0000 0001``
+     - Nearby
+     - No
+     - Red
+     - No
+   * - ``41``
+     - ``0100 0001``
+     - Far
+     - No
+     - Red
+     - No
+   * - ``a1``
+     - ``1010 0001``
+     - Small Vib.
+     - Yes
+     - Red
+     - No
+   * - ``fb``
+     - ``1111 1011``
+     - Large Vib.
+     - Yes
+     - Yellow
+     - Yes
+   * - ``fd``
+     - ``1111 1101``
+     - Large Vib.
+     - Yes
+     - Blue
+     - Yes
+
+Implementation Notes
+--------------------
+
+When implementing the command generator, ensure the **Bit 4** logic is handled correctly, as setting it to ``1`` will mute the touch feedback sound. The **Bit 0** must always be high to ensure the packet is recognized by the Metis hardware.
+
+.. image:: _static/InitSequence.jpg
+   :alt: Metis Initialization Sequence Diagram
+   :align: center
+   :width: 80%
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 2.1 Core Command Set
