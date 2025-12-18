@@ -177,6 +177,28 @@ When implementing the command generator, ensure the **Bit 4** logic is handled c
    :align: center
    :width: 80%
 
+
+Reaction Telemetry (Response 0300 on channel 0x0005)
+----------------------------------
+
+The device notifies the host upon trigger or impact using Handle 0x0005.
+The packet structure is fixed at 4 bytes: ``03 00 YY ZZ``.
+
+* **Byte 2 (YY) - Reaction Time:**
+  Measured in centiseconds (10ms units).
+  Example: ``0x39`` = 57 = 0.57 seconds.
+  This timer starts when the visual/acoustic stimulus is triggered by the firmware.
+
+* **Byte 3 (ZZ) - Impact Force:**
+  Raw value from the internal accelerometer or proximity sensor.
+  Higher values represent stronger impacts.
+  Example: ``0x31`` (49 dec) indicates a high-intensity hit.
+
+Keep-Alive Mechanism
+^^^^^^^^^^^^^^^^^^^^
+While the device is in an "Armed" state (waiting for trigger), the host must
+periodically send heartbeats to maintain the BLE connection:
+* **Command:** ``04 05`` followed by ``05``.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 2.1 Core Command Set
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
