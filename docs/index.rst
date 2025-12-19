@@ -14,7 +14,10 @@
 
 METIS Reaction Lights: BLE Protocol Analysis (WIP)
 ============================================
-
+.. image:: _static/Front_1.jpg
+   :alt: Metis Initialization Sequence Diagram
+   :align: center
+   :width: 80%
 Welcome to the documentation for the reverse-engineered METIS Reaction Lights BLE Protocol.
 
 The goal of this project is to fully document the Attribute Protocol (ATT) commands, Service UUIDs, and Characteristics necessary to communicate directly with the devices, enabling custom integration and independent application development beyond the official software.
