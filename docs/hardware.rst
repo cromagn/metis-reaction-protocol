@@ -11,15 +11,15 @@ The goal of this chapter is to document **what is physically present on the
 device**, distinguishing between *confirmed components* and *reverse-engineered
 assumptions*.
 
-.. image:: _static/Disassembly_1.jpg
+.. image:: _static/Disassembly_2.jpg
    :alt: Metis HW Front
    :align: center
-   :width: 80%
+   :width: 50%
    
-.. image:: _static/Disassembly_2.jpg
+.. image:: _static/Disassembly_3.jpg
    :alt: Metis Hardware Back
    :align: center
-   :width: 80%
+   :width: 50%
 ---
 
 Device Architecture Overview
