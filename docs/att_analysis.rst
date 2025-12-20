@@ -198,7 +198,7 @@ Keep-Alive Mechanism
 ^^^^^^^^^^^^^^^^^^^^
 While the device is in an "Armed" state (waiting for trigger), the host must
 periodically send heartbeats to maintain the BLE connection:
-* **Command:** ``04 05`` followed by ``05``.
+* **Command:** ``20`` and receive something on handle 5.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 2.1 Core Command Set
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
