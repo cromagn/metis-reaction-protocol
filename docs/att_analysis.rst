@@ -3,334 +3,129 @@
 Attribute Protocol (ATT) Payload Analysis
 =========================================
 
-This chapter focuses on the deep decoding of the Attribute Protocol (ATT) payloads exchanged via the proprietary Service UUID (``6e40...0001``).
+This chapter provides a deep dive into the Attribute Protocol (ATT) payloads exchanged via the proprietary Service UUID (``6e40...0001``).
 
-Based on the sniffed traffic, the roles of the key ATT handles have been identified as follows:
+Based on the sniffed traffic, the roles of the key ATT handles are:
 
-- **Handle ``0x0003``** → Command Channel (WRITE / TX)
-- **Handle ``0x0005``** → Notification Channel (NOTIFY / RX)
-- **Handle ``0x0006``** → Client Characteristic Configuration Descriptor (CCCD)
-
-These handles form a simple but robust proprietary protocol layered on top of ATT.
+* **Handle ``0x0003``** → Command Channel (WRITE / TX)
+* **Handle ``0x0005``** → Notification Channel (NOTIFY / RX)
+* **Handle ``0x0006``** → Client Characteristic Configuration Descriptor (CCCD)
 
 -----------------------------------------------------------------------
 
-1. Connection and Initialization Sequence (Handshake)
------------------------------------------------------
+1. Connection and Initialization Sequence
+-----------------------------------------
 
-Every communication session between the application (Central) and the device (Peripheral) follows a precise and repeatable initialization sequence.
+Every session between the Central (App) and Peripheral (Metis) follows this startup sequence:
 
-.. list-table:: Connection and Initialization Sequence
+.. list-table:: Initialization Flow
    :header-rows: 1
-   :widths: 20 20 10 10 15 35
+   :widths: 20 15 10 15 40
 
    * - Step
-     - Example Packet
      - Protocol
      - Handle
      - Value
      - Description
    * - MTU Negotiation
-     - ``33`` (Exchange MTU Req / Rsp)
      - ATT
      - —
      - —
-     - Negotiates the Maximum Transmission Unit (typically up to 247 bytes).
-   * - Enable Notifications (CCCD)
-     - ``35`` (Write Request)
+     - Negotiates Max Transmission Unit (up to 247 bytes).
+   * - Enable Notifications
      - ATT
      - ``0x0006``
      - ``0100``
-     - Enables notifications for Handle ``0x0005``.
-   * - Initial Handshake / Ping
-     - ``34`` (Write Command)
+     - Enables notifications on Handle ``0x0005``.
+   * - Initial Ping
      - ATT
      - ``0x0003``
      - ``20``
-     - Initial keep-alive command used to wake the device and request status.
-
-Once this sequence is completed, the device starts emitting notifications asynchronously.
-
-Here the related sniff
+     - Wakes the device and requests initial status.
 
 .. image:: _static/Init_Sequence.jpg
-   :alt: Init sequence
+   :alt: Initialization sequence sniff
    :align: center
    :width: 90%
-   
+
 -----------------------------------------------------------------------
 
-2. Command Structure and Mode Mapping (Handle 0x0003)
------------------------------------------------------
+2. Command Structure (Handle 0x0003)
+------------------------------------
 
-All control commands sent to the device share a **fixed 2-byte structure**:
+Commands sent to the device typically follow a **2-byte format**: ``[Opcode] [Configuration Bitmask]``.
 
-::
+* **Opcode 0x02:** Arms the device (starts the light/sensor).
+* **Opcode 0x20:** Keep-alive / Status request.
+* **Opcode 0x04 / 0x05:** Stop / Reset sequence.
 
-   [ Opcode ] [ State ID ]
+Configuration Bitmask (The "State ID")
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The most common opcode is ``0x02``, which is used to control light color and operating mode.
-
-Metis Reaction Protocol: Command Specification
-----------------------------------------------
-
-This document describes the 8-bit command structure used to control the Metis devices. Through reverse engineering of the communication logs, the command byte has been decoded into a specific bitmask.
-
-Command Byte Structure
-----------------------
-
-Each command consists of a single byte (8 bits). The functions are mapped as follows:
+When using **Opcode 0x02**, the second byte defines the device behavior:
 
 +-------+-------+-------+-------+-------+-------+-------+-------+
 | Bit 7 | Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
 +-------+-------+-------+-------+-------+-------+-------+-------+
-|   Sensor Mode | Flash | Touch | Start |     Color     | Fixed |
+|   Sensor Mode | Flash | !Audio| Start |     Color     | Fixed |
 +-------+-------+-------+-------+-------+-------+-------+-------+
 
-Detailed Bit Definitions
-------------------------
+* **Bits 7-6 (Sensor Mode):** ``00``: Close | ``01``: Far | ``10``: Vib. Low | ``11``: Vib. High.
+* **Bit 5 (Flash):** ``1``: Enable LED flash on impact.
+* **Bit 4 (Audio Disable):** ``1``: Mute touch sound (**Inverted logic**).
+* **Bit 3 (Start Sound):** ``1``: Beep when the light turns on.
+* **Bits 2-1 (Color):** ``00``: Red | ``01``: Yellow | ``10``: Blue | ``11``: Green.
+* **Bit 0 (Fixed):** Must always be ``1`` for command recognition.
 
-**Sensor Mode (Bits 7-6)**
-  Determines the sensitivity and the trigger type:
-  * ``00``: Nearby / Close range
-  * ``01``: Far range
-  * ``10``: Small Vibrations
-  * ``11``: Large Vibrations
+Verified Command Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Flash (Bit 5)**
-  Controls the visual flash effect:
-  * ``0``: Flash OFF
-  * ``1``: Flash ON
-
-**Touch-Sound Disable (Bit 4)**
-  *Note: This bit uses inverted logic.*
-  * ``0``: Feedback Sound ON
-  * ``1``: Feedback Sound OFF
-
-**Startup-Sound (Bit 3)**
-  * ``0``: Sound at startup OFF
-  * ``1``: Sound at startup ON
-
-**Color Selection (Bits 2-1)**
-  Defines the LED color of the device:
-  * ``00``: Red
-  * ``01``: Yellow
-  * ``10``: Blue
-  * ``11``: Green (Hypothesized)
-
-**Fixed Control (Bit 0)**
-  * Always set to ``1``. This bit likely acts as a command identifier for the receiver.
-
-Reference Table
----------------
-
-Below are common commands derived from the protocol analysis:
-
-.. list-table:: Verified Commands
-   :widths: 15 15 25 15 15 15
+.. list-table:: Common Configuration Payloads
+   :widths: 20 20 60
    :header-rows: 1
 
-   * - Hex
-     - Binary
-     - Sensor Mode
-     - Flash
-     - Color
-     - Startup Sound
-   * - ``01``
+   * - Full Payload (Hex)
+     - Config Byte (Bin)
+     - Description
+   * - ``02 01``
      - ``0000 0001``
-     - Nearby
-     - No
-     - Red
-     - No
-   * - ``41``
+     - Red, Proximity (Close), Sound ON.
+   * - ``02 41``
      - ``0100 0001``
-     - Far
-     - No
-     - Red
-     - No
-   * - ``a1``
+     - Red, Proximity (Far), Sound ON.
+   * - ``02 A1``
      - ``1010 0001``
-     - Small Vib.
-     - Yes
-     - Red
-     - No
-   * - ``fb``
+     - Red, Vib. Low, Flash ON, Sound ON.
+   * - ``02 FB``
      - ``1111 1011``
-     - Large Vib.
-     - Yes
-     - Yellow
-     - Yes
-   * - ``fd``
-     - ``1111 1101``
-     - Large Vib.
-     - Yes
-     - Blue
-     - Yes
-
-Implementation Notes
---------------------
-
-When implementing the command generator, ensure the **Bit 4** logic is handled correctly, as setting it to ``1`` will mute the touch feedback sound. The **Bit 0** must always be high to ensure the packet is recognized by the Metis hardware.
-
-.. image:: _static/InitSequence.jpg
-   :alt: Metis Initialization Sequence Diagram
-   :align: center
-   :width: 80%
-
-
-Reaction Telemetry (Response 0300 on channel 0x0005)
-----------------------------------
-
-The device notifies the host upon trigger or impact using Handle 0x0005.
-The packet structure is fixed at 4 bytes: ``03 00 YY ZZ``.
-
-* **Byte 2 (YY) - Reaction Time:**
-  Measured in centiseconds (10ms units).
-  Example: ``0x39`` = 57 = 0.57 seconds.
-  This timer starts when the visual/acoustic stimulus is triggered by the firmware.
-
-* **Byte 3 (ZZ) - Impact Force:**
-  Raw value from the internal accelerometer or proximity sensor.
-  Higher values represent stronger impacts.
-  Example: ``0x31`` (49 dec) indicates a high-intensity hit.
-
-Keep-Alive Mechanism
-^^^^^^^^^^^^^^^^^^^^
-The host must periodically send heartbeats to maintain the BLE connection:
-* **Command:** ``20`` and receive something (battery level?) on handle 0x0005.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-2.1 Core Command Set
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table:: Core Command Set
-   :header-rows: 1
-   :widths: 30 15 10 10 35
-
-   * - Action (App Event)
-     - Hex Payload
-     - Opcode
-     - State ID
-     - Description
-   * - Keep Alive / Ping
-     - ``20``
-     - ``0x20``
-     - —
-     - Periodic keep-alive command used to maintain synchronization.
-   * - Turn Off / Reset
-     - ``04 05`` → ``05``
-     - ``0x04`` / ``0x05``
-     - —
-     - Universal command sequence used to stop the current illumination or activity.
-   * - Set Color: RED (Default / Audio)
-     - ``02 89``
-     - ``0x02``
-     - ``0x89``
-     - Sets RED light in default mode (audio enabled).
-   * - Set Color: RED (Mute)
-     - ``02 91``
-     - ``0x02``
-     - ``0x91``
-     - Sets RED light with audio muted.
-   * - Set Color: RED (Flash)
-     - ``02 A1``
-     - ``0x02``
-     - ``0xA1``
-     - Sets RED light in flash mode.
-   * - Set Color: RED (Vibration)
-     - ``02 C1``
-     - ``0x02``
-     - ``0xC1``
-     - Sets RED light with vibration enabled.
-   * - Set Color: GREEN
-     - ``02 8A``
-     - ``0x02``
-     - ``0x8A``
-     - Sets the light to GREEN.
-   * - Set Color: YELLOW
-     - ``02 8B``
-     - ``0x02``
-     - ``0x8B``
-     - Sets the light to YELLOW.
-   * - Set Color: BLUE
-     - ``02 8C``
-     - ``0x02``
-     - ``0x8C``
-     - Sets the light to BLUE.
-   * - Set Color: WHITE / Special
-     - ``02 CC``
-     - ``0x02``
-     - ``0xCC``
-     - Hypothesized WHITE or special high-intensity state.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-2.2 State ID (Byte 2) Bit Encoding
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The **State ID** byte is interpreted as a **bitmask** controlling both the base color and optional features.
-
-.. list-table:: State ID Bit Encoding
-   :header-rows: 1
-   :widths: 25 15 40
-
-   * - Bit
-     - Hex Value
-     - Feature Control
-   * - Bit 6 (64)
-     - ``0x40``
-     - Vibration mode toggle (0 = OFF, 1 = ON).
-   * - Bit 5 (32)
-     - ``0x20``
-     - Flash mode toggle (0 = OFF, 1 = ON).
-   * - Bit 4 (16)
-     - ``0x10``
-     - Audio mute toggle (0 = Audio ON, 1 = MUTE).
-   * - Bit 3 (8)
-     - ``0x08``
-     - Secondary audio or color-related feature (hypothesized).
-   * - Remaining bits
-     - Varies
-     - Encode the base color identifier.
+     - Yellow, Vib. High, Flash ON, Start Beep ON.
 
 -----------------------------------------------------------------------
 
-3. Event and Notification Structure (Handle 0x0005)
----------------------------------------------------
+3. Telemetry and Notifications (Handle 0x0005)
+----------------------------------------------
 
-The device emits notifications whenever a state change or physical event (e.g. touch / hit) occurs.
+The device communicates events using a 4-byte notification: ``03 00 YY ZZ``.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-3.1 Core Notification Set
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* **Byte 0 (Opcode):** Always ``03`` for sensor events.
+* **Byte 2 (Reaction Time):** Time in centiseconds (1/100s) from stimulus to impact.
+* **Byte 3 (Impact Force):** Raw intensity value of the hit/proximity trigger.
 
-.. list-table:: Core Notification Set
-   :header-rows: 1
-   :widths: 30 20 10 10 40
-
-   * - Event (Device → Host)
-     - Hex Payload Example
-     - Opcode
-     - Data
-     - Description
-   * - Status Response
-     - ``21 03 87 01``
-     - ``0x21``
-     - Varies
-     - Response to the ``0x20`` ping. Indicates connection, session or battery status.
-   * - Sensor Data Stream
-     - ``03 00 A0 03``
-     - ``0x03``
-     - Varies
-     - Real-time event stream while a light is active (hit detection, feedback, intensity).
-
+Status Response
+^^^^^^^^^^^^^^^
+In response to a ``20`` ping, the device returns: ``21 03 XX YY``.
+This typically carries battery level or system readiness states.
 
 -----------------------------------------------------------------------
 
-4. Power off sequence
------------------------------------------------------
+4. Connection Maintenance
+-------------------------
 
-Here the related sniff
+To keep the device from timing out, the host must send:
+1. **Heartbeat:** ``20`` every 2-5 seconds.
+2. **Shutdown:** To stop a session, send the sequence ``04 05`` followed by ``05``.
 
 .. image:: _static/Power_off_sequence.jpg
-   :alt: Power off sequence
+   :alt: Power off sequence sniff
    :align: center
    :width: 90%
