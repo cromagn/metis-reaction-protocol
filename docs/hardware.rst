@@ -110,7 +110,20 @@ The MCU operating range (1.8–3.6 V) allows efficient direct battery operation
 without complex power stages.
 
 ---
+Debug Port (PCB Headers)
+------------------------
 
+The PCB exposes a 5-pin header for factory testing and debugging:
+
+* **VCC (3.3V):** Logic power supply.
+* **GND:** Common ground.
+* **TX (Transmit):** Serial output from the PHY6212 (3.3V TTL).
+* **RX (Receive):** Serial input to the PHY6212 (3.3V TTL).
+* **TM (Test Mode):** Used to trigger ISP (In-System Programming) mode.
+
+.. warning::
+   The UART interface operates at **3.3V logic levels**. Connecting 5V 
+   signals will permanently damage the SoC.
 Output Components
 -----------------
 
