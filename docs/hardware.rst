@@ -64,6 +64,8 @@ features the following characteristics:
 | Operating Voltage    | 1.8 V – 3.6 V                                  |
 +----------------------+------------------------------------------------+
 
+* :download:`PHY6212 Architecture Reference <_static/PHY6212_Datasheet.pdf>`
+
 This configuration is consistent with:
 
 - BLE 5.0 features observed at protocol level
