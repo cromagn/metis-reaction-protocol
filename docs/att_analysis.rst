@@ -196,9 +196,8 @@ The packet structure is fixed at 4 bytes: ``03 00 YY ZZ``.
 
 Keep-Alive Mechanism
 ^^^^^^^^^^^^^^^^^^^^
-While the device is in an "Armed" state (waiting for trigger), the host must
-periodically send heartbeats to maintain the BLE connection:
-* **Command:** ``20`` and receive something on handle 5.
+The host must periodically send heartbeats to maintain the BLE connection:
+* **Command:** ``20`` and receive something (battery level?) on handle 0x0005.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 2.1 Core Command Set
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
