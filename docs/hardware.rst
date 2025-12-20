@@ -64,7 +64,7 @@ features the following characteristics:
 | Operating Voltage    | 1.8 V – 3.6 V                                  |
 +----------------------+------------------------------------------------+
 
-* :download:`PHY6212 Architecture Reference <_static/PHY6212_Datasheet.pdf>`
+`Download the PHY6212 Datasheet <_static/PHY6212_Datasheet.pdf>`_
 
 This configuration is consistent with:
 
