@@ -1,4 +1,4 @@
-.. METIS Reaction Lights BLE Protocol Documentation
+.. METIS FORZA Reaction Lights BLE Protocol Documentation
 .. =================================================
 
 .. *********************************************************************************
@@ -12,7 +12,7 @@
 
    The author(s) of this documentation and the associated code are **not affiliated with, endorsed by, or sponsored by METIS** or its parent companies. Use of this information may violate the terms of service or warranty agreements of the original manufacturer. Proceed at your own risk.
 
-METIS Reaction Lights: BLE Protocol Analysis (WIP)
+METIS FORZA Reaction Lights: BLE Protocol Analysis (WIP)
 ============================================
 .. image:: _static/Front_1.jpg
    :alt: Metis Images
@@ -25,7 +25,7 @@ The goal of this project is to fully document the Attribute Protocol (ATT) comma
 Device Overview
 ---------------
 
-The METIS Reaction Lights are portable, sensor-equipped training devices utilized primarily in sports performance and neuro-training contexts. They communicate wirelessly to coordinate drills involving light activation and touch/proximity detection.
+The METIS FORZA Reaction Lights are portable, sensor-equipped training devices utilized primarily in sports performance and neuro-training contexts. They communicate wirelessly to coordinate drills involving light activation and touch/proximity detection.
 
 
 Contextual Resources
