@@ -29,7 +29,7 @@ How to sniff
 
 .. image:: _static/HowTo_2.jpg
    :alt: Play
-   :align: left
+   :align: center
    :width: 5%
 
 
