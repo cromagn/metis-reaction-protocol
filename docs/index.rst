@@ -51,7 +51,6 @@ Table of Contents
    ble_protocol
    att_analysis
    tools
-   implementation
 
 Support and Contribution
 ------------------------
